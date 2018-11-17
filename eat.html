@@ -1,9 +1,146 @@
-<!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-</head>
-<body>
-	<div>中午吃什么</div>
-</body>
+	<head>
+		<meta charset="utf-8"/>
+		<title></title>
+		<style type="text/css">
+			body{
+           		background-color: ghostwhite;/*整个网页的背景颜色*/
+			}
+			 h1{
+			      text-align: center;/*文本居中*/
+			      margin-top:100px;
+			}
+			 .box{
+			     width: 1000px;     /*大盒子宽度10000像素*/
+			      height: 240px;    /*大盒子高度240像素*/
+			      margin: 0 auto;   /*外边距：上下的外间距为0   水平(左右)间距 自动居中*/
+			      margin-top: 100px;/* 距离上方的外间距空出100像素*/
+			      clear: both;      /*清除浮动*/
+			}
+			 #btn{
+			      width: 100px;     /*按钮的宽度为100像素*/
+			      height: 30px;     /*按钮的高度为100像素*/
+			      margin-left: 750px;/*按钮距离左侧外边距为600像素*/
+			      margin-top: 50px; /*按钮距离上方外边距为50像素*/
+			      background: thistle;
+				  font-size: 14px;
+				  font-weight: 900;
+			}
+			 .name{                 /*name是子节点在js代码单独设置的类选择器*/
+			      width: 100px;     /*设置子节点盒子的宽度是100像素*/
+			      height: 30px;     /*设置子节点盒子的高度是30像素*/
+			      float: left;      /*设置子节点盒子的浮动为向左浮动*/
+			      background-color: antiquewhite;/*设置子节点盒子的背景颜色为“古董白”色*/
+			      margin-left: 10px;/*设置子节点盒子距离左侧外边距为10像素*/
+			      margin-top: 10px; /*设置子节点盒子距离上侧外边距为10像素*/
+			      text-align: center;/*设置子节点盒子中的文本字体为居中显示*/
+			      line-height: 30px;/*设置子节点盒子中的文本高度为30像素*/
+			}
+			 #span{                 /*日期在单独的一行中显示，所以采用行内元素span*/
+			      float: right;     /*向左浮动*/
+			      position: relative;/*设置位置为：相对定位。*/
+			      top: 30px;        /*上方空出55显示*/
+			      right: 300px;     /*右侧空出185像素*/
+			      font-family:fantasy;
+			      color:yellowgreen;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>今天吃什么呢</h1>
+		
+		<!--右侧拼接的当前时间-->
+	    <span id="span"></span>
+	    
+		<div class="box" id="box"></div>
+		
+		<input type="button" id="btn" value="点名"/>
+	</body>
+	<script>
+		
+		//1.创造虚拟后台数据
+        var arrs = ["手抓饼","烤冷面","麻辣串","面条","猪肘饭","海底捞","泥炉烤肉","蒸汽海鲜",
+            "泰国菜","日料","铁锅炖大鹅","新疆菜","杭帮菜","上海菜","自助餐","煎饼果子","西餐","川菜"
+            ,"饺子","鸭血粉丝汤","串串香","羊蝎子","云南菜","烤羊腿","望京小腰","湘菜","烤鱼","北京菜"
+            ,"东北菜","肉蟹煲","肯德基","虾吃虾涮","鲜芋仙","鱼火锅","全聚德","撸串","螺蛳粉","大猪蹄子"
+            ,"分米鸡","黄焖鸡","中东菜","港式茶餐厅","披萨","满记甜品","呷哺呷哺"];
+            
+		//2.获取父节点元素
+	    var boxNode = document.getElementById("box");
+	    //2.1循环遍历所有的数组中的元素，然后创建子节点元素
+       for (var i = 0; i < arrs.length; i++) {
+            //通过文档对象 创建新元素“div”小盒子，使用divNode子节点进行接收
+            var divNode = document.createElement("div");
+            //使用子节点divNode向页面中写入数组中的每一个元素的名字
+            divNode.innerHTML=arrs[i];
+            //使用子节点divNode 调用 css中的类选择器的name
+            divNode.className="name";
+	        //使用父节点进行追加子节点
+	        boxNode.appendChild(divNode);
+        }
+       
+		//3.点名
+        // 使用文档对象通过id获取元素到btn
+        var btn= document.getElementById("btn");
+        // 当按钮btn被单击后触发匿名函数
+        btn.onclick = function () {
+          // 如果 选择的值全等于“点名”二字 则执行下方代码
+           if(this.value === "点名"){
+            	//设置定时器：每过100毫秒、执行一次下方的setTimes函数 并使用 timeId进行接收定时后的结果
+                timeId = setInterval("setTimes()",100);
+                this.value="停止";//本次按钮的内容被赋值为停止 
+            }else{//否则
+                //清除计时器
+                clearInterval(timeId);// 清除定时器（定时后的结果被清除）
+                this.value="点名";//本次按钮的内容被赋值为点名
+            }
+        }
+        
+        // 设置定时器内容函数
+        function setTimes () {
+            //遍历数组中的使用元素
+            for (var j = 0; j < arrs.length; j++) {
+                //将父节点数组中的每一个元素的背景颜色清空
+                boxNode.children[j].style.background="";
+            }
+            // 获取随机选中的结果
+            //parseInt() 函数可解析一个字符串,并返回一个整数
+            //Math.random()是数学函数中的随机某个数值（可整、可小数）
+            var random = parseInt(Math.random()*arrs.length);
+            //将父节点数组中的随机被选中元素的背景颜色设置为红/
+            boxNode.children[random].style.background="red";
+        }
+        
+//      function reset(){
+//      	
+//      }
+		         
+		//4.调用时间
+	   //使用文档对象通过id获取元素到span
+	    var spanNode = document.getElementById("span");
+	   //调用获取时间函数
+	    getTime();
+	    //设置定时器： 每过1秒执行一次  时间函数
+	    setInterval(getTime , 1000);
+	    // 定义 获取时间  函数
+	    function getTime() {
+	      // 实例化对象： 创建日期对象
+          var day = new Date();
+          //通过对象获取年月日时分秒
+          var year = day.getFullYear();
+          var month = day.getMonth()+1;
+          var dat = day.getDate();
+          var hours = double(day.getHours());
+          var minitues = double(day.getMinutes());
+          var second = double(day.getSeconds());
+          // 通过 span节点向页面拼接写入 年月日时分秒
+          spanNode.innerHTML =year+"-"+month+"-"+dat+" "+hours+":"+minitues+":"+second;
+	    }
+	    
+	    //时分秒为单数时拼接0
+	    function double(dd){
+	    	return dd < 10 ? '0'+ dd : dd;
+	    }
+		
+	</script>
 </html>
